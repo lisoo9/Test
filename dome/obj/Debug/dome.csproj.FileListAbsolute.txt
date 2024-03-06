@@ -1,0 +1,6 @@
+C:\新生作业\升级\dome\bin\Debug\dome.dll
+C:\新生作业\升级\dome\bin\Debug\dome.pdb
+C:\新生作业\升级\dome\obj\Debug\dome.csproj.AssemblyReference.cache
+C:\新生作业\升级\dome\obj\Debug\dome.csproj.CoreCompileInputs.cache
+C:\新生作业\升级\dome\obj\Debug\dome.dll
+C:\新生作业\升级\dome\obj\Debug\dome.pdb
