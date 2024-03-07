@@ -1,0 +1,100 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+#如果将更改推送到main或releases分支中，将触发管道，如果对以old开的realeases分支进行更改，则不会触发管道。
+trigger:
+  branches:
+    include:
+      - release/production
+      - release/rehearsal
+      - origin/*
+
+# strategy:
+#   matrix:
+#     os: [windows-11-latest]
+# pool:
+#   vmImage: ${{ matrix.os }}
+
+variables:
+  solution: '**/*.sln'
+  buildvsVersion: '17.0'
+  # 选择'Any CPU'之后，例如64位的机器默认的运行就是64位
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  matrix:
+    os: 'windows-11-latest'
+
+pool:
+  vmImage: ${{ matrix.os }}
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build job
+    steps:
+    - task: NugetToolInstaller@1
+    - task: NuGetCommand@2
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(solution)'
+        feedsToUse: 'select'
+
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        #17.0(Visual Studio 2022),16.0(Visual Studio 2019)
+        vsVersion: '17.0'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+    - task: VSTest@2
+      inputs:
+        # 允许的值： testAssemblies (测试程序集) 、 testPlan (测试计划) (testRun 测试运行) 。 默认值：testAssemblies。
+        testSelector: 'testAssemblies'
+        #当 testSelector = testAssemblies 时，需要此选项
+        testAssemblyVer2: |
+          **\*test*.dll
+          !**\*TestAdapter.dll
+          !**\obj\**
+        # 当 testSelector = testPlan 时，需要此选项
+        # testPlan: 
+        # testSuite: 
+        # testConfiguration: 
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  # 当job成功并且为production时才能执行
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/production'))
+  jobs:
+  - deployment: DeployWeb
+    displayName: 'Deploy'
+    environment: 'production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            inputs:
+              # <your-subscription>需要先设定好使用哪种方式来创建Azure资源管理器服务连接
+              azureSubscription: <your-subscription>
+              appType: 'webApp'
+              appName: 'LunaLunaSugotoku'
+              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+              deploymentMethod: 'auto'
+          - task: AzureCloudPowerShellDeployment@2
+            inputs:
+              ARMConnectedServiceName: 'Lnln.Smartphone.Sugotoku.Azure'
+              ResourceGroupName: 'Lnln.Smartphone.Sugotoku.Azure'
+              ARMStorageAccount: “devsugotoku”, “sugotoku3”, “rcsugotoku3”
+              ServiceName: "Lnln.Smartphone.Sugotoku"
+              ServiceLocation: <your-closest-location>
+              CsCfg: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
+              CsDef: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
+              CsPkg: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
