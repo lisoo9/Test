@@ -89,16 +89,16 @@ stages:
               # <your-subscription>需要先设定好使用哪种方式来创建Azure资源管理器服务连接
               azureSubscription: '$(azureSubscription)'
               appType: 'webApp'
-              appName: 'LunaLunaSugotoku'
+              appName: '$(appName)'
               package: '$(System.DefaultWorkingDirectory)/**/*.zip'
               deploymentMethod: 'auto'
           - task: AzureCloudPowerShellDeployment@2
             inputs:
-              ARMConnectedServiceName: 'Lnln.Smartphone.Sugotoku.Azure'
-              ResourceGroupName: 'Lnln.Smartphone.Sugotoku.Azure'
-              ARMStorageAccount: “devsugotoku”, “sugotoku3”, “rcsugotoku3”
-              ServiceName: "Lnln.Smartphone.Sugotoku"
-              ServiceLocation: <your-closest-location>
-              CsCfg: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
-              CsDef: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
-              CsPkg: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
+              ARMConnectedServiceName: '$(ARMConnectedServiceName)'
+              ResourceGroupName: '$(ResourceGroupName)'
+              ARMStorageAccount: '$(ARMStorageAccount)'
+              ServiceName: '$(ServiceName)'
+              ServiceLocation: '$(ServiceLocation)'
+              CsCfg: '$(CsCfg)'
+              CsDef: '$(CsDef)'
+              CsPkg: '$(CsPkg)'
