@@ -76,8 +76,8 @@ stages:
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
-  # 当job成功并且为production时才能执行
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/production'), eq(variables['Build.Reason'], 'Manual'))
+  # 当job成功并且为test时才能执行
+  condition: and(succeeded(), contains(variables['Build.SourceBranch'], 'test'))
   jobs:
   - deployment: DeployWeb
     displayName: 'Deploy'
