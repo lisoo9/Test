@@ -14,14 +14,12 @@ variables:
   solution: '**/*.sln'
   # 选择'Any CPU'之后，例如64位的机器默认的运行就是64位
   buildPlatform: 'Any CPU'
-  buildConfiguration: 
-    - 'Release'
-    - 'Debug'
-    - 'Development'
-    - 'integration'
-    - 'ReleaseCandidate'
-  matrix:
-    os: 'windows-11-latest'
+  buildConfiguration: 'Release'
+    # - 'Debug'
+    # - 'Development'
+    # - 'integration'
+    # - 'ReleaseCandidate'
+  azureSubscription: 'your-subscription'
   appname: ''
   ARMConnectedServiceName: ''
   ResourceGroupName: ''
@@ -33,7 +31,7 @@ variables:
   CsPkg: ''
 
 pool:
-  vmImage: ${{ matrix.os }}
+  vmImage: 'windows-11-latest'
 
 stages:
 - stage: Build
@@ -55,7 +53,7 @@ stages:
         #17.0(Visual Studio 2022),16.0(Visual Studio 2019)
         vsVersion: '17.0'
         platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration[0])'
+        configuration: '$(buildConfiguration)'
     - task: VSTest@2
       inputs:
         # 允许的值： testAssemblies (测试程序集) 、 testPlan (测试计划) (testRun 测试运行) 。 默认值：testAssemblies。
@@ -71,7 +69,7 @@ stages:
         # testConfiguration: 
         searchFolder: '$(System.DefaultWorkingDirectory)'
         platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration[0])'
+        configuration: '$(buildConfiguration)'
 
 - stage: Deploy
   displayName: Deploy stage
@@ -89,7 +87,7 @@ stages:
           - task: AzureWebApp@1
             inputs:
               # <your-subscription>需要先设定好使用哪种方式来创建Azure资源管理器服务连接
-              azureSubscription: <your-subscription>
+              azureSubscription: '$(azureSubscription)'
               appType: 'webApp'
               appName: 'LunaLunaSugotoku'
               package: '$(System.DefaultWorkingDirectory)/**/*.zip'
