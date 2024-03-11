@@ -14,7 +14,7 @@ variables:
   solution: '**/*.sln'
   # 选择'Any CPU'之后，例如64位的机器默认的运行就是64位
   buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  # buildConfiguration: 'Release'
     # - 'Debug'
     # - 'Development'
     # - 'integration'
@@ -53,7 +53,7 @@ stages:
         #17.0(Visual Studio 2022),16.0(Visual Studio 2019)
         vsVersion: '17.0'
         platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
+        configuration: 'Release'
     - task: VSTest@2
       inputs:
         # 允许的值： testAssemblies (测试程序集) 、 testPlan (测试计划) (testRun 测试运行) 。 默认值：testAssemblies。
@@ -69,7 +69,7 @@ stages:
         # testConfiguration: 
         searchFolder: '$(System.DefaultWorkingDirectory)'
         platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
+        configuration: 'Release'
 
 - stage: Deploy
   displayName: Deploy stage
