@@ -19,6 +19,7 @@ variables:
     # - 'Development'
     # - 'integration'
     # - 'ReleaseCandidate'
+  # <your-subscription>需要先设定好使用哪种方式来创建Azure资源管理器服务连接
   azureSubscription: 'your-subscription'
   appname: ''
   ARMConnectedServiceName: ''
@@ -86,7 +87,6 @@ stages:
           steps:
           - task: AzureWebApp@1
             inputs:
-              # <your-subscription>需要先设定好使用哪种方式来创建Azure资源管理器服务连接
               azureSubscription: '$(azureSubscription)'
               appType: 'webApp'
               appName: '$(appName)'
