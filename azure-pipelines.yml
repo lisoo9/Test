@@ -14,22 +14,23 @@ variables:
   solution: '**/*.sln'
   # 选择'Any CPU'之后，例如64位的机器默认的运行就是64位
   buildPlatform: 'Any CPU'
-  # buildConfiguration: 'Release'
+  # buildConfiguration: "Release"
     # - 'Debug'
     # - 'Development'
     # - 'integration'
     # - 'ReleaseCandidate'
   # <your-subscription>需要先设定好使用哪种方式来创建Azure资源管理器服务连接
-  azureSubscription: 'your-subscription'
-  appname: ''
-  ARMConnectedServiceName: ''
-  ResourceGroupName: ''
-  ARMStorageAccount: ''
-  ServiceName: ''
-  ServiceLocation: ''
-  CsCfg: ''
-  CsDef: ''
-  CsPkg: ''
+  # <your-closest-location>选项包括：美国东部、美国东部 2、美国中部、美国中南部、美国西部、北欧、西欧等。
+  azureSubscription: '<your-subscription>'
+  appname: 'LunaLunaSugotoku'
+  ARMConnectedServiceName: 'Lnln.Smartphone.Sugotoku.Azure'
+  ResourceGroupName: 'Lnln.Smartphone.Sugotoku.Azure'
+  ARMStorageAccount: “devsugotoku”, “sugotoku3”, “rcsugotoku3”
+  ServiceName: 'Lnln.Smartphone.Sugotoku'
+  ServiceLocation: '<your-closest-location>'
+  CsCfg: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
+  CsDef: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
+  CsPkg: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
 
 pool:
   vmImage: 'windows-11-latest'
