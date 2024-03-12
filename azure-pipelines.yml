@@ -28,7 +28,9 @@ variables:
   ResourceGroupName: 'Lnln.Smartphone.Sugotoku.Azure'
   ARMStorageAccount:
     -"devsugotoku"
+    -"sugotoku2"
     -"sugotoku3"
+    -"rcsugotoku2"
     -"rcsugotoku3"
   ServiceName: 'Lnln.Smartphone.Sugotoku'
   ServiceLocation: '<your-closest-location>'
@@ -81,8 +83,8 @@ stages:
   displayName: Deploy stage
   dependsOn: Build
   # 当job成功并且为test时才能执行
-  # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/test'))
-  condition: and(succeeded(), contains(variables['Build.DefinitionName'], '.Test'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/test'))
+  # condition: and(succeeded(), contains(variables['Build.DefinitionName'], '.Test'))
   jobs:
   - deployment: DeployWeb
     displayName: 'Deploy'
