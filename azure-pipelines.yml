@@ -46,7 +46,8 @@ stages:
         #17.0(Visual Studio 2022),16.0(Visual Studio 2019)
         vsVersion: '17.0'
         platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration[0])'
+        configuration: $[ if eq(variables['Build.SourceBranch'], 'refs/heads/main') then '$(buildConfiguration[0])' elseif eq(variables['Build.SourceBranch'], 'refs/heads/development') then '$(buildConfiguration[2])' elseif startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/') then '$(buildConfiguration[3])' elseif contains(variables['Build.SourceBranch'], 'ReleaseCandidate') then '$(buildConfiguration[4])' else '$(buildConfiguration[1])' ]
+  
     - task: VSTest@2
       inputs:
         # 允许的值： testAssemblies (测试程序集) 、 testPlan (测试计划) (testRun 测试运行) 。 默认值：testAssemblies。
@@ -62,8 +63,8 @@ stages:
         # testConfiguration: 
         searchFolder: '$(System.DefaultWorkingDirectory)'
         platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration[0])'
-
+        configuration: $[ if eq(variables['Build.SourceBranch'], 'refs/heads/main') then '$(buildConfiguration[0])' elseif eq(variables['Build.SourceBranch'], 'refs/heads/development') then '$(buildConfiguration[2])' elseif startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/') then '$(buildConfiguration[3])' elseif contains(variables['Build.SourceBranch'], 'ReleaseCandidate') then '$(buildConfiguration[4])' else '$(buildConfiguration[1])' ]
+  
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
