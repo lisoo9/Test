@@ -75,7 +75,7 @@ stages:
   jobs:
   - deployment: DeployWeb
     displayName: 'Deploy'
-    environment: 'production'
+    environment: 'production'#Azure DevOps 会自动创建所需的环境
     strategy:
       runOnce:
         deploy:
