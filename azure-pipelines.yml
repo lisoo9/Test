@@ -20,24 +20,9 @@ variables:
     -"Development"
     -"integration"
     -"ReleaseCandidate"
-  # <your-subscription>需要先设定好使用哪种方式来创建Azure资源管理器服务连接
-  # <your-closest-location>选项包括：美国东部、美国东部 2、美国中部、美国中南部、美国西部、北欧、西欧等。
   azureSubscription: '<your-subscription>'
-  appname: 'LunaLunaSugotoku'
-  ARMConnectedServiceName: 'Lnln.Smartphone.Sugotoku.Azure'
-  ResourceGroupName: 'Lnln.Smartphone.Sugotoku.Azure'
-  ARMStorageAccount:
-    -"devsugotoku"
-    -"sugotoku2"
-    -"sugotoku3"
-    -"rcsugotoku2"
-    -"rcsugotoku3"
-  ServiceName: 'Lnln.Smartphone.Sugotoku'
-  ServiceLocation: '<your-closest-location>'
-  CsCfg: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
-  CsDef: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
-  CsPkg: "LunaLunaSugotoku/Sugotoku/Lnln.Smartphone.Sugotoku.Azure"
-
+  webAppName: 'LunaLunaSugotoku'
+  
 pool:
   vmImage: 'windows-11-latest'
 
@@ -93,20 +78,11 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: AzureWebApp@1
+          
+          - task: AzureRmWebAppDeployment@4
             inputs:
+              ConnectionType: 'AzureRM'
               azureSubscription: '$(azureSubscription)'
               appType: 'webApp'
-              appName: '$(appName)'
-              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-              deploymentMethod: 'auto'
-          - task: AzureCloudPowerShellDeployment@2
-            inputs:
-              ARMConnectedServiceName: '$(ARMConnectedServiceName)'
-              ResourceGroupName: '$(ResourceGroupName)'
-              ARMStorageAccount: '$(ARMStorageAccount[0])'
-              ServiceName: '$(ServiceName)'
-              ServiceLocation: '$(ServiceLocation)'
-              CsCfg: '$(CsCfg)'
-              CsDef: '$(CsDef)'
-              CsPkg: '$(CsPkg)'
+              WebAppName: '$(webAppName)'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
